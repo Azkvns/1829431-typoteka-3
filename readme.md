@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Айзек Венс](https://up.htmlacademy.ru/nodejs/3/user/1829431).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Шестерин](https://htmlacademy.ru/profile/id1831979). 
 
 ---
 
