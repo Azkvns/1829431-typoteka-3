@@ -1,5 +1,6 @@
 'use strict';
 
+const {log} = require(`../utils`);
 const {getLineWithIndentFromStart} = require(`./utils`);
 
 const INDENT_TO_DESCRIPTION = 22;
@@ -32,6 +33,6 @@ module.exports = {
     this.rootFile = rootFile;
   },
   run() {
-    console.info(makeHelpText(this.modules, this.rootFile));
+    log.info(makeHelpText(this.modules, this.rootFile));
   }
 };

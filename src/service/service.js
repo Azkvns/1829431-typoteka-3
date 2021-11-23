@@ -2,6 +2,7 @@
 
 const {Cli, availableCommands} = require(`./cli`);
 const {ExitCode, DEFAULT_USER_COMMAND} = require(`./constants`);
+const {log} = require(`./utils`);
 
 const USER_ARGV_INDEX = 2;
 
@@ -14,6 +15,6 @@ const commandArguments = userArguments.slice(1);
 try {
   Cli[command].run(commandArguments);
 } catch (err) {
-  console.error(err.message);
+  log.error(err.message);
   process.exit(ExitCode.failed);
 }
