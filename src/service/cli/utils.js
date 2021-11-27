@@ -2,6 +2,7 @@
 
 const path = require(`path`);
 const packageFile = require(`../../../package.json`);
+const fs = require(`fs`).promises;
 
 module.exports = {
   getLineWithIndentFromStart(str, indent, minIndent = 1) {
@@ -27,4 +28,13 @@ module.exports = {
 
     return someArray;
   },
+
+  async loadFileData(fileName) {
+    try {
+      const data = await fs.readFile(fileName, `utf-8`);
+      return data.split(`\n`);
+    } catch (err) {
+      throw new Error(`Не получилось получить данные из файла (${fileName})`);
+    }
+  }
 };

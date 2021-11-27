@@ -1,19 +1,20 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const {getRandomInt, shuffle} = require(`../utils`);
 const {format} = require(`date-fns`);
-const {CATEGORIES, ANNOUNCES, TITLES, FILE_NAME, OutputRestrict, AnnounceRestrict, DateDifferenceRestrict, CREATED_DATE_FORMAT} = require(`./constants`);
 const {log} = require(`../../utils`);
+const {OUTPUT_FILE_NAME, InputDataFileNames} = require(`../../constants`);
+const {getRandomInt, shuffle, loadFileData} = require(`../utils`);
+const {OutputRestrict, AnnounceRestrict, DateDifferenceRestrict, CREATED_DATE_FORMAT} = require(`./constants`);
 
-const generateOffers = (count) => {
+const generateOffers = ({sentences, categories, titles, count}) => {
   return Array(count).fill({}).map(() => {
     return {
-      title: TITLES[getRandomInt(0, TITLES.length - 1)],
-      announce: shuffle(ANNOUNCES).slice(AnnounceRestrict.MIN, AnnounceRestrict.MAX).join(` `),
-      fullText: shuffle(ANNOUNCES).slice(0, getRandomInt(1, ANNOUNCES.length - 1)).join(` `),
+      title: titles[getRandomInt(0, titles.length - 1)],
+      announce: shuffle(sentences).slice(AnnounceRestrict.MIN, AnnounceRestrict.MAX).join(` `),
+      fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
       createdDate: format(getRandomInt(DateDifferenceRestrict.OLDER, DateDifferenceRestrict.NEWEST), CREATED_DATE_FORMAT),
-      category: shuffle(CATEGORIES).slice(0, getRandomInt(1, CATEGORIES.length - 1)),
+      category: shuffle(categories).slice(0, getRandomInt(1, categories.length - 1)),
     };
   });
 };
@@ -30,10 +31,16 @@ module.exports = {
       throw new Error(`Не больше ${OutputRestrict.MAX} объявлений`);
     }
 
-    const content = JSON.stringify(generateOffers(countOffer));
+    const data = {
+      sentences: await loadFileData(InputDataFileNames.sentences),
+      categories: await loadFileData(InputDataFileNames.categories),
+      titles: await loadFileData(InputDataFileNames.titles),
+    };
+
+    const content = JSON.stringify(generateOffers({...data, count: countOffer}));
 
     try {
-      await fs.writeFile(FILE_NAME, content);
+      await fs.writeFile(OUTPUT_FILE_NAME, content);
       log.success(`Успешная операция. Файл создан.`);
     } catch (err) {
       throw new Error(`Не получилось записать данные в файл`);

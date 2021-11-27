@@ -12,9 +12,14 @@ const command = availableCommands.includes(requestedCommand) ? requestedCommand 
 
 const commandArguments = userArguments.slice(1);
 
-try {
-  Cli[command].run(commandArguments);
-} catch (err) {
-  log.error(err.message);
-  process.exit(ExitCode.failed);
-}
+const runService = async () => {
+  try {
+    await Cli[command].run(commandArguments);
+  } catch (err) {
+    log.error(err.message);
+    process.exit(ExitCode.failed);
+  }
+};
+
+runService();
+
