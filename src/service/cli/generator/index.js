@@ -3,17 +3,17 @@
 const fs = require(`fs`).promises;
 const {format} = require(`date-fns`);
 const {log} = require(`../../utils`);
-const {OUTPUT_FILE_NAME, InputDataFileNames} = require(`../../constants`);
+const {OUTPUT_FILE_NAME, INPUT_DATA_FILE_NAMES} = require(`../../constants`);
 const {getRandomInt, shuffle, loadFileData} = require(`../utils`);
-const {OutputRestrict, AnnounceRestrict, DateDifferenceRestrict, CREATED_DATE_FORMAT} = require(`./constants`);
+const {OUTPUT_RESTRICT, ANNOUNCE_RESTRICT, DATE_DIFFERENCE_RESTRICT, CREATED_DATE_FORMAT} = require(`./constants`);
 
 const generateOffers = ({sentences, categories, titles, count}) => {
   return Array(count).fill({}).map(() => {
     return {
       title: titles[getRandomInt(0, titles.length - 1)],
-      announce: shuffle(sentences).slice(AnnounceRestrict.MIN, AnnounceRestrict.MAX).join(` `),
+      announce: shuffle(sentences).slice(ANNOUNCE_RESTRICT.MIN, ANNOUNCE_RESTRICT.MAX).join(` `),
       fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
-      createdDate: format(getRandomInt(DateDifferenceRestrict.OLDER, DateDifferenceRestrict.NEWEST), CREATED_DATE_FORMAT),
+      createdDate: format(getRandomInt(DATE_DIFFERENCE_RESTRICT.OLDER, DATE_DIFFERENCE_RESTRICT.NEWEST), CREATED_DATE_FORMAT),
       category: shuffle(categories).slice(0, getRandomInt(1, categories.length - 1)),
     };
   });
@@ -25,16 +25,16 @@ module.exports = {
   description: `формирует файл mocks.json`,
   async run(args) {
     const [count] = args;
-    const countOffer = Number.parseInt(count, 10) || OutputRestrict.MIN;
+    const countOffer = Number.parseInt(count, 10) || OUTPUT_RESTRICT.MIN;
 
-    if (countOffer > OutputRestrict.MAX) {
-      throw new Error(`Не больше ${OutputRestrict.MAX} объявлений`);
+    if (countOffer > OUTPUT_RESTRICT.MAX) {
+      throw new Error(`Не больше ${OUTPUT_RESTRICT.MAX} объявлений`);
     }
 
     const data = {
-      sentences: await loadFileData(InputDataFileNames.sentences),
-      categories: await loadFileData(InputDataFileNames.categories),
-      titles: await loadFileData(InputDataFileNames.titles),
+      sentences: await loadFileData(INPUT_DATA_FILE_NAMES.sentences),
+      categories: await loadFileData(INPUT_DATA_FILE_NAMES.categories),
+      titles: await loadFileData(INPUT_DATA_FILE_NAMES.titles),
     };
 
     const content = JSON.stringify(generateOffers({...data, count: countOffer}));

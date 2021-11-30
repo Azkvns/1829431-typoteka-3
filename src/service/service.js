@@ -1,7 +1,7 @@
 'use strict';
 
 const {Cli, availableCommands} = require(`./cli`);
-const {ExitCode, DEFAULT_USER_COMMAND} = require(`./constants`);
+const {EXIT_CODES, DEFAULT_USER_COMMAND} = require(`./constants`);
 const {log} = require(`./utils`);
 
 const USER_ARGV_INDEX = 2;
@@ -17,7 +17,7 @@ const runService = async () => {
     await Cli[command].run(commandArguments);
   } catch (err) {
     log.error(err.message);
-    process.exit(ExitCode.failed);
+    process.exit(EXIT_CODES.failed);
   }
 };
 
