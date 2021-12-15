@@ -5,8 +5,9 @@ const {getRootFileName} = require(`./utils`);
 const version = require(`./version`);
 const help = require(`./help`);
 const generate = require(`./generator`);
+const server = require(`./server`);
 
-const modules = [version, help, generate];
+const modules = [version, help, generate, server];
 const availableCommands = modules.map((command) => command.name);
 
 help.configure(modules, getRootFileName());

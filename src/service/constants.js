@@ -1,6 +1,6 @@
 'use strict';
 
-const EXIT_CODE = {
+const EXIT_CODES = {
   success: 0,
   failed: 1
 };
@@ -13,11 +13,11 @@ const INPUT_DATA_FILE_NAMES = {
   categories: `./data/categories.txt`
 };
 
-const OUTPUT_FILE_NAME = `mocks.json`;
+const MOCKS_FILE_NAME = `mocks.json`;
 
 module.exports = {
-  EXIT_CODE,
+  EXIT_CODES,
   DEFAULT_USER_COMMAND,
-  OUTPUT_FILE_NAME,
+  MOCKS_FILE_NAME,
   INPUT_DATA_FILE_NAMES
 };
